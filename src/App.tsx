@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { MainPage } from "./pages/MainPage";
+import { useState } from "react";
 
-function App() {
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+import { AboutPage } from "./pages/AboutPage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { OneTodoListPage } from "./pages/OneTodoListPage";
+import { LoginPage } from "./pages/LoginPage";
+import type { TaskType, TodoListType } from "./types/types";
+import { RegistrationPage } from "./pages/RegistrationPage";
+
+export const App = ()=> {
+  const [todolists, setTodolists] = useState<TodoListType[]>([]);
+  const [tasks, setTasksList] = useState<TaskType[]>([]);
+  
+  const getTodolists = (newTodolists: TodoListType[]) => {
+    setTodolists(newTodolists)
+  }
+
+  const getTasksList = (newTasks: TaskType[]) => {
+    setTasksList(newTasks)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<MainPage todolists={todolists} getTodolists={getTodolists} />}/>
+      <Route path="/registration" element={<RegistrationPage />}/>
+      <Route path="/login" element={<LoginPage />}/>
+      <Route path="/about" element={<AboutPage />}/>
+      <Route path="/profile" element={<ProfilePage />}/>
+      <Route path="/mytodo/:id" element={<OneTodoListPage tasks={tasks} getTasksList={getTasksList}/>}/>
+    </Routes>
+    </BrowserRouter>
     </div>
   );
-}
-
-export default App;
+};
